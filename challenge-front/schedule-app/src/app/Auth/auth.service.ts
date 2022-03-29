@@ -1,0 +1,71 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  authenticated = false;
+  router:Router;
+  str:any;
+  constructor(private http: HttpClient,router : Router) {
+    this.router=router
+    if(localStorage.getItem("auth")!=null){
+       this.str =localStorage.getItem("auth");
+       this.authenticated = JSON.parse(this.str);
+      
+    }
+    else{
+      this.authenticated = false;
+      localStorage.setItem("auth", JSON.stringify(this.authenticated));
+    }
+    
+    
+
+  }
+  logout(){
+    this.http.get("/api/perform_logout").subscribe(()=>{
+      console.log("log out geldi")
+      this.authenticated=false;
+      localStorage.setItem("auth", JSON.stringify(this.authenticated));
+      this.router.navigate(['/']);
+      
+    });
+  }
+  authenticate(data:FormGroup) {
+      const params = new URLSearchParams();
+      const formValue = data.value; // this.form should be a FormGroup
+      
+      for (const key in formValue) {
+          params.append(key, formValue[key]);
+      }
+         
+        /*const headers = new HttpHeaders(credentials ? {
+            authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+        } : {});{headers: headers}*/
+        this.http.post('/api/login', params.toString(),{
+          observe : 'response',
+          headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('Access-Control-Allow-Origin','*')
+          .set('Access-Control-Allow-Methods','*')
+          .set('Access-Control-Allow-Headers','Origin, Content-Type, X-Auth-Token')
+      }).subscribe({next : response => {
+            this.authenticated=true;
+            localStorage.setItem("auth", JSON.stringify(this.authenticated));
+            console.log("authenticated")
+            this.router.navigate(['/'])
+           
+        },error: (error) => {                              //Error callback
+          this.authenticated=false;
+          localStorage.setItem("auth", JSON.stringify(this.authenticated));
+          console.log("failed")
+          this.router.navigate(['/login'])
+          //throw error;   //You can also throw the error to a global error handler
+        }});
+
+    }
+
+}

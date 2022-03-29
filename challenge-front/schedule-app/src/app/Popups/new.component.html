@@ -1,0 +1,48 @@
+<div class="e-dlg-container e-dlg-center-center e-schedule-dialog-container" style="z-index: 1003; position: fixed;" [style.display]="newPop?'flex':'none'">
+    <div id="Schedule_dialog_wrapper" class="e-lib e-dialog e-control e-schedule-dialog e-dlg-modal e-popup e-popup-open" role="dialog" style="max-height: 480px; z-index: 1003; width: 500px; left: 0px; top: 0px; min-height: 300px; position: relative;" aria-labelledby="Schedule_dialog_wrapper" aria-describedby="Schedule_dialog_wrapper_dialog-content" aria-modal="true" tabindex="-1">
+       <div class="e-dlg-header-content" id="Schedule_dialog_wrapper_dialog-header">
+          <button class="e-dlg-closeicon-btn e-control e-btn e-lib e-flat e-icon-btn" type="button" title="Close" aria-label="Close"><span class="e-btn-icon e-icon-dlg-close e-icons"></span></button>
+          <div class="e-dlg-header" id="Schedule_dialog_wrapper_title">
+             <div class="e-title-text">New Event</div>
+          </div>
+       </div>
+       <div class="e-dlg-content" id="Schedule_dialog_wrapper_dialog-content">
+          <div class="e-form-container">
+             <form class="e-schedule-form e-lib e-formvalidator" id="ScheduleEditForm"  novalidate="">
+                <div class="e-dialog-parent">
+                   <div class="e-title-location-row">
+                      <div class="e-subject-container">
+                         <div class="e-float-input e-control-wrapper"><input class="e-subject e-field" type="text" name="Subject" [(ngModel)]="eventDto.header" id="header" title="Title" aria-labelledby="label_Subject"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label_Subject" for="Subject">Title</label></div>
+                      </div>
+                   </div>
+                   <div class="e-start-end-row">
+                      <div class="e-start-container">
+                         <div class="e-float-input e-control-wrapper e-input-group e-datetime-wrapper e-valid-input" style="width: 100%;"><input class="e-start e-field e-control e-datetimepicker e-lib e-keyboard" type="date" name="StartTime" [ngModel] ="date | date:'yyyy-MM-dd'" (ngModelChange)="date = $event" id="startDate" title="Start" aria-labelledby="label_StartTime" aria-live="assertive" aria-atomic="true" aria-haspopup="true" aria-activedescendant="null" aria-owns="StartTime_options" aria-expanded="false" role="combobox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-disabled="false" tabindex="0" aria-invalid="false">
+                            <span class="e-float-line"></span>
+                            <label class="e-float-text e-label-top" id="label_StartTime" for="StartTime">Start</label><span class="e-clear-icon e-clear-icon-hide" aria-label="close" role="button"></span><span class="e-input-group-icon e-date-icon e-icons" aria-label="select"></span><span class="e-input-group-icon e-time-icon e-icons"></span></div>
+                      </div>
+                      <div class="e-end-container">
+                         <div class="e-float-input e-control-wrapper e-input-group e-datetime-wrapper e-valid-input" style="width: 100%;"><input class="e-end e-field e-control e-datetimepicker e-lib e-keyboard" type="time" name="startTime" id="startTime" [ngModel] ="startDate | date:'HH:mm'" (ngModelChange)="startDateTime = $event" title="StartTime" aria-labelledby="label_EndTime" aria-live="assertive" aria-atomic="true" aria-haspopup="true" aria-activedescendant="null" aria-owns="EndTime_options" aria-expanded="false" role="combobox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-disabled="false" tabindex="0" aria-invalid="false">
+                            <span class="e-float-line"></span><label class="e-float-text e-label-top" id="label_EndTime" for="EndTime">End</label><span class="e-clear-icon e-clear-icon-hide" aria-label="close" role="button"></span><span class="e-input-group-icon e-date-icon e-icons" aria-label="select"></span><span class="e-input-group-icon e-time-icon e-icons"></span></div>
+                      </div>
+                      <div class="e-end-container">
+                        <div class="e-float-input e-control-wrapper e-input-group e-datetime-wrapper e-valid-input" style="width: 100%;"><input class="e-end e-field e-control e-datetimepicker e-lib e-keyboard" type="time" name="EndTime" id="endTime" [ngModel] ="endDate | date:'HH:mm'" (ngModelChange)="endDateTime = $event" title="EndTime" aria-labelledby="label_EndTime" aria-live="assertive" aria-atomic="true" aria-haspopup="true" aria-activedescendant="null" aria-owns="EndTime_options" aria-expanded="false" role="combobox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-disabled="false" tabindex="0" aria-invalid="false">
+                           <span class="e-float-line"></span><label class="e-float-text e-label-top" id="label_EndTime" for="EndTime">End</label><span class="e-clear-icon e-clear-icon-hide" aria-label="close" role="button"></span><span class="e-input-group-icon e-date-icon e-icons" aria-label="select"></span><span class="e-input-group-icon e-time-icon e-icons"></span></div>
+                     </div>
+                   </div>
+                   
+                   <div class="e-description-row">
+                      <div class="e-description-container">
+                         <div class="e-float-input e-control-wrapper e-multi-line-input"><textarea class="e-description e-field" type="text" name="Description" [(ngModel)]="eventDto.details" id="description" title="Description" aria-labelledby="label_Description"></textarea><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label_Description" for="Description">Description</label></div>
+                      </div>
+                   </div>
+                   <button type="hidden" title="submit" style="display:none"></button>
+                </div>
+             </form>
+          </div>
+       </div>
+       <div class="e-footer-content"><button type="button" class="e-control e-btn e-lib e-event-delete e-flat e-disable" (click)="deleteEvent()">Delete</button>
+        <button type="button" (click)="createNew()" class="e-control e-btn e-lib e-primary e-event-save e-flat">Save</button><button type="button" class="e-control e-btn e-lib e-event-cancel e-flat" (click)="onClose()">Cancel</button></div>
+    </div>
+    <div class="e-dlg-overlay" style="z-index: 1002; display: block; position: absolute;"></div>
+ </div>

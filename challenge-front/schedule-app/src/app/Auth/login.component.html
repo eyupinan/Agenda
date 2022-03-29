@@ -1,0 +1,13 @@
+<div class="login">
+    <h1>Login</h1>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <input type="text" name="username" placeholder="Username" id="user" formControlName="username"/>
+    <input type="password" name="password" placeholder="Password" id="password" formControlName="password"/>
+    <input name="submit" type="submit" value="submit" />
+    <button name="button" type="button" onclick="location.href='/register'" >Register</button>
+    </form>
+    <p style="color:white" id="err_msg" hidden>Error occured! Try again.</p>
+
+</div>
+
+
