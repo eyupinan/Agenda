@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {  Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ScheduleService } from '../scheduler/schedule.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 
 @Component({
@@ -16,18 +15,23 @@ export class LoginComponent implements OnInit {
   });
   httpserv:AuthService;
   router:Router;
-  scheduleService:ScheduleService
-  constructor(httpserv: AuthService,router :Router,scheduleService:ScheduleService) { 
+  failed:boolean=false;
+  constructor(httpserv: AuthService,router :Router,private route: ActivatedRoute) { 
     this.router=router;
     this.httpserv=httpserv;
-    this.scheduleService=scheduleService;
   }
 
   ngOnInit(): void {
+    this.route.queryParams
+      .subscribe(params => {
+        if (params["err"]==true || params["err"]=="true"){
+          this.failed=true;
+        }
+      }
+    );
   }
   onSubmit(){
     this.httpserv.authenticate(this.profileForm)
-    this.scheduleService.getUser()
   }
 
 

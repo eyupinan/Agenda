@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {  AfterViewInit, Component,  ElementRef,  OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AuthService } from '../Auth/auth.service';
 import { NewComponent } from '../Popups/new.component';
 import { EventDTO, ScheduleService, User } from './schedule.service';
@@ -32,6 +32,7 @@ export class ScheduleComponent implements OnInit,AfterViewInit {
   blockSize:number=72;
   @ViewChild(NewComponent) newComponent:NewComponent;
   @ViewChild('eventContainer', { read: TemplateRef }) eventContainer:TemplateRef<any>;
+  @ViewChild('row', { read: ElementRef }) row:ElementRef;
  
 
   days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -64,6 +65,9 @@ export class ScheduleComponent implements OnInit,AfterViewInit {
     return [x,y]
    }
   ngOnInit(): void {
+  }
+  ngAfterViewInit() {
+    this.blockSize=this.row.nativeElement.offsetHeight*2;// her bir yarım saatlik bloğun yükseklik değerine göre eventler boyutlandırılıyor.
     this.refreshEvents(null);
   }
   refreshEvents(event){
@@ -71,8 +75,7 @@ export class ScheduleComponent implements OnInit,AfterViewInit {
     this.events=[]
 
     dt.setDate(this.sunday.getDate() +7)
-    this.scheduleService.getEvents(this.sunday,dt).subscribe((body)=>{
-      console.log(body)
+    this.scheduleService.getEvents(this.sunday,dt).subscribe({next:(body)=>{
       let arr = body as unknown as EventDTO[];
       for(let i=0;i<arr.length;i++){
         let graph = new EventGraph();
@@ -85,10 +88,9 @@ export class ScheduleComponent implements OnInit,AfterViewInit {
         this.events.push(graph)
       }
       
-    });
-  }
-  ngAfterViewInit() {
-    console.log("eventTemplate:",this.eventContainer)
+    },error:(error)=>{
+      this.auth.expired()
+    }});
   }
   activeDaysCreater(activeDate:Date){
     activeDate= new Date(activeDate);
@@ -99,7 +101,6 @@ export class ScheduleComponent implements OnInit,AfterViewInit {
     this.sunday.setHours(this.sunday.getHours()-this.sunday.getHours());
     this.sunday.setMinutes(this.sunday.getMinutes()-this.sunday.getMinutes());
     this.sunday.setSeconds(this.sunday.getSeconds()-this.sunday.getSeconds());
-    console.log("sun",this.sunday)
     for(let i=0;i<7;i++){
       var dayName = this.days[activeDate.getDay()];
       let obj={dayName:dayName,dayNumber:activeDate.getDate(),date:activeDate}
@@ -140,11 +141,8 @@ export class ScheduleComponent implements OnInit,AfterViewInit {
     this.newPop=true;
   }
   updateEvent(event){
-    console.log(event.target)
     let elementId = event.target.getAttribute("id")
-    console.log(elementId)
     let eventId =elementId.split("_")[1]
-    console.log(eventId)
     for(let i =0;i<this.events.length;i++){
       if(this.events[i].event.id==eventId){
         this.newComponent.setEvent(this.events[i].event)
@@ -153,7 +151,14 @@ export class ScheduleComponent implements OnInit,AfterViewInit {
       }
     }
   }
-  
+  perform_logout(){
+    this.auth.logout()
+  }
+  changeWeek(day:number){
+    this.activeDate=new Date(this.activeDate)
+    this.activeDate.setDate(this.activeDate.getDate()+day);
+    this.onDateChange()
+  }
 
 
 }

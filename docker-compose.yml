@@ -1,0 +1,47 @@
+
+version: "3.9" 
+services:
+  
+      
+  redis:
+    image: redis
+    container_name: redis
+  db:
+    container_name: postgresql
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Eyup_inan5}
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: "exit 0"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  rest:
+      build: challenge-back/
+      container_name: restApi
+      ports:
+        - "8080:8080"
+      volumes:
+        - /target:/app
+      links:
+        - redis
+        - db
+      depends_on:
+        db:
+          condition: service_healthy
+        redis:
+          condition: service_started
+      restart: on-failure
+  front:
+      build: challenge-front/
+      ports:
+        - "4200:4200"
+      links:
+        - rest
+      restart: on-failure
+volumes:
+  logvolume01: {}

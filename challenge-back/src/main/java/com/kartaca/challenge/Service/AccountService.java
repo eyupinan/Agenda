@@ -80,7 +80,7 @@ public class AccountService implements UserDetailsService{
             }
         }
         this.userDataMapper(user,data);
-
+        user.setDisabled(false);
 
         this.save(user);
     }

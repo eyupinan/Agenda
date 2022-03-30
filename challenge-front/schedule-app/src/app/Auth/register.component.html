@@ -1,7 +1,15 @@
-<ul>
-    <li><a routerLink="/" routerLinkActive="active">schedule</a></li>
-    <li><a routerLink="/login" routerLinkActive="active">login</a></li>
-    <li><a routerLink="/register" routerLinkActive="active">register</a></li>
+<div style="position: absolute;width: 110%;height: 110%;left:-10%;top:-10%" class="comp-body">
+        <div class="login">
+            <h1>Register</h1>
+            <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+            <input type="text" name="username" placeholder="Username" id="username"  formControlName="username" />
+            <input type="text" name="phone" placeholder="Phone" id="phone"  formControlName="phone"/>
+            <textarea name="address" placeholder="address" id="address" style="height:80px"  formControlName="address"></textarea>
+            <input type="email" name="email" placeholder="Email" id="text"  formControlName="email"/>
+            <input type="password" name="password" placeholder="Password" id="password"  formControlName="password"/>
+            <input name="submit" type="submit" value="submit" /></form>
+            <p style="color:white" id="err_msg" *ngIf="failed">Register failed! Try again</p>
+        </div>
+    </div>
+        
     
-    </ul>
-<p>register</p>

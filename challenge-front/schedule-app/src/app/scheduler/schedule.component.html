@@ -1,24 +1,26 @@
-  <div class="control-section">
+<div style="position: absolute;width: 110%;height: 110%;left:-10%;top:-10%" class="comp-body">
+  <div class="control-section" style="position: absolute;top:10%;left:9%;width:91%;" >
+    <button (click)="perform_logout()">Log Out</button>
     <div class="stack">
       <input id="stackblitz" type="button" class="stkbltz" style="visibility: hidden;" onclick="openStackBlitz()" title="Open in StackBlitz">
     </div>
-    <div id="container">
+    <div id="container" style="position: absolute;width:96%;left:2%;height:200%">
       <div id="Schedule" class="e-control e-schedule e-lib e-keyboard" tabindex="0" role="main" aria-label="Week of February 20, 2018" style="width: 100%; height: 500px;">
         <div class="e-schedule-toolbar-container">
           <div class="e-schedule-toolbar e-control e-toolbar e-lib e-keyboard e-toolpop" role="toolbar" aria-disabled="false" aria-haspopup="false" aria-orientation="horizontal" tabindex="0" style="height: auto; width: auto;">
             <div class="e-toolbar-items e-tbar-pos">
               <div class="e-toolbar-left">
                 <div class="e-toolbar-item e-prev e-tbtn-align e-overflow-show" aria-disabled="false" aria-label="previous period" role="navigation" title="Previous">
-                  <button class="e-tbar-btn e-control e-btn e-lib e-icon-btn" type="button" id="e-tbr-btn_0" aria-label="Previous" style="width: auto;" title="Previous" tabindex="-1">
-                    <span class="e-btn-icon e-icon-prev e-icons"></span>
+                  <button (click)="changeWeek(-7)" class="e-tbar-btn e-control e-btn e-lib e-icon-btn" type="button" id="e-tbr-btn_0" aria-label="Previous" style="width: auto;" title="Previous" tabindex="-1">
+                    <span class="e-btn-icon e-icons"><</span>
                   </button>
                 </div>
                 <div class="e-toolbar-item e-next e-tbtn-align e-overflow-show" aria-disabled="false" aria-label="next period" role="navigation" title="Next">
-                  <button class="e-tbar-btn e-control e-btn e-lib e-icon-btn" type="button" id="e-tbr-btn_1" aria-label="Next" style="width: auto;" title="Next" tabindex="-1">
-                    <span class="e-btn-icon e-icon-next e-icons"></span>
+                  <button (click)="changeWeek(7)"  class="e-tbar-btn e-control e-btn e-lib e-icon-btn" type="button" id="e-tbr-btn_1" aria-label="Next" style="width: auto;" title="Next" tabindex="-1">
+                    <span class="e-btn-icon e-icons">></span>
                   </button>
                 </div>
-                <input type="date" required="required" id="specified-date" (change)="onDateChange()" [(ngModel)] ="activeDate">
+                <input type="date" required="required" id="specified-date" (change)="onDateChange()" [ngModel] ="activeDate | date:'yyyy-MM-dd'" (ngModelChange)="activeDate = $event">
                 
               </div>
               <div class="e-toolbar-center" style="margin-left: 429.5px;"></div>
@@ -119,13 +121,13 @@
                                 <ng-container *ngTemplateOutlet="eventContainer">
                                 </ng-container>
                             </thead>
-                            <tbody #row>
+                            <tbody >
                             <ng-container *ngFor="let in of range(24) ;let number = index">
                                 <tr role="row">
                                     <th role="gridcell" aria-selected="false" colspan="1" class="e-work-cells e-alternate-cells" rowspan="2"  >
                                         <span>{{number}}:00</span>
                                       </th>
-                                    <td role="gridcell" aria-selected="false" colspan="1" class="e-work-cells e-alternate-cells" [attr.data-date]="setDateForButton(0,number*60)" (click)="createEvent($event)"></td>
+                                    <td role="gridcell" aria-selected="false" colspan="1" class="e-work-cells e-alternate-cells" [attr.data-date]="setDateForButton(0,number*60)" (click)="createEvent($event)" #row></td>
                                     <td role="gridcell" aria-selected="false" colspan="1" class="e-work-cells e-alternate-cells" [attr.data-date]="setDateForButton(1,number*60)" (click)="createEvent($event)"></td>
                                     <td role="gridcell" aria-selected="false" colspan="1" class="e-work-cells e-alternate-cells" [attr.data-date]="setDateForButton(2,number*60)" (click)="createEvent($event)"></td>
                                     <td role="gridcell" aria-selected="false" colspan="1" class="e-work-cells e-alternate-cells" [attr.data-date]="setDateForButton(3,number*60)" (click)="createEvent($event)"></td>
@@ -147,118 +149,7 @@
                         </table>
                         </div>
                     </td>
-                </tr>
-                
-                  
-                          <!--<tr>
-                            <td class="e-day-wrapper" data-date="1518901200000">
-                              <div class="e-appointment-wrapper" id="e-appointment-wrapper-0"></div>
-                            </td>
-                            <td class="e-day-wrapper" data-date="1518987600000">
-                              <div class="e-appointment-wrapper" id="e-appointment-wrapper-1">
-                                <div class="e-appointment e-lib e-draggable" data-id="Appointment_9" data-guid="2acb57a8-3c0b-a936-4a92-9583d58ab231" role="button" tabindex="0" aria-readonly="false" aria-selected="false" aria-grabbed="true" aria-label="Alien Civilization Begin From Monday, February 19, 2018 at 11:00:00 AM GMT+03:00 Ends At Monday, February 19, 2018 at 1:00:00 PM GMT+03:00" style="width: 93%; height: 144px; top: 792px; left: 0%; background-color: rgb(194, 178, 128);">
-                                  <div class="e-event-resize e-top-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                  <div class="e-appointment-details">
-                                    <div class="e-subject" style="max-height: 104px;">Alien Civilization</div>
-                                    <div class="e-time">11:00 AM - 1:00 PM</div>
-                                    <div class="e-location"></div>
-                                  </div>
-                                  <div class="e-event-resize e-bottom-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="e-day-wrapper" data-date="1519074000000">
-                              <div class="e-appointment-wrapper" id="e-appointment-wrapper-2">
-                                <div class="e-appointment e-lib e-draggable" data-id="Appointment_15" data-guid="da720a91-797a-ae69-1931-9eabf2bbbc25" role="button" tabindex="0" aria-readonly="false" aria-selected="false" aria-grabbed="true" aria-label="Facts of Humming Birds Begin From Tuesday, February 20, 2018 at 9:30:00 AM GMT+03:00 Ends At Tuesday, February 20, 2018 at 11:00:00 AM GMT+03:00" style="width: 93%; height: 108px; top: 684px; left: 0%; background-color: rgb(194, 178, 128);">
-                                  <div class="e-event-resize e-top-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                  <div class="e-appointment-details">
-                                    <div class="e-subject" style="max-height: 68px;">Facts of Humming Birds</div>
-                                    <div class="e-time">9:30 AM - 11:00 AM</div>
-                                    <div class="e-location"></div>
-                                  </div>
-                                  <div class="e-event-resize e-bottom-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="e-day-wrapper" data-date="1519160400000">
-                              <div class="e-appointment-wrapper" id="e-appointment-wrapper-3">
-                                <div class="e-appointment e-lib e-draggable" data-id="Appointment_10" data-guid="298a21ab-50eb-8a42-99bd-17aac25abb38" role="button" tabindex="0" aria-readonly="false" aria-selected="false" aria-grabbed="true" aria-label="Wildlife Galleries Begin From Wednesday, February 21, 2018 at 11:00:00 AM GMT+03:00 Ends At Wednesday, February 21, 2018 at 1:00:00 PM GMT+03:00" style="width: 93%; height: 144px; top: 792px; left: 0%; background-color: rgb(149, 185, 199);">
-                                  <div class="e-event-resize e-top-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                  <div class="e-appointment-details">
-                                    <div class="e-subject" style="max-height: 104px;">Wildlife Galleries</div>
-                                    <div class="e-time">11:00 AM - 1:00 PM</div>
-                                    <div class="e-location"></div>
-                                  </div>
-                                  <div class="e-event-resize e-bottom-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="e-day-wrapper" data-date="1519246800000">
-                              <div class="e-appointment-wrapper" id="e-appointment-wrapper-4">
-                                <div class="e-appointment e-lib e-draggable" data-id="Appointment_11" data-guid="9b9cfca8-a24a-a5dc-0aac-05b231d8bb3c" role="button" tabindex="0" aria-readonly="false" aria-selected="false" aria-grabbed="true" aria-label="Best Photography 2018 Begin From Thursday, February 22, 2018 at 9:30:00 AM GMT+03:00 Ends At Thursday, February 22, 2018 at 11:00:00 AM GMT+03:00" style="width: 93%; height: 108px; top: 684px; left: 0%; background-color: rgba(153, 85, 187, 0.6);">
-                                  <div class="e-event-resize e-top-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                  <div class="e-appointment-details">
-                                    <div class="e-subject" style="max-height: 68px;">Best Photography 2018</div>
-                                    <div class="e-time">9:30 AM - 11:00 AM</div>
-                                    <div class="e-location"></div>
-                                  </div>
-                                  <div class="e-event-resize e-bottom-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="e-day-wrapper" data-date="1519333200000">
-                              <div class="e-appointment-wrapper" id="e-appointment-wrapper-5">
-                                <div class="e-appointment e-lib e-draggable" data-id="Appointment_16" data-guid="cb6a04b0-9ea8-9498-98a7-9d946ba88065" role="button" tabindex="0" aria-readonly="false" aria-selected="false" aria-grabbed="true" aria-label="Sky Gazers Begin From Friday, February 23, 2018 at 11:00:00 AM GMT+03:00 Ends At Friday, February 23, 2018 at 1:00:00 PM GMT+03:00" style="width: 93%; height: 144px; top: 792px; left: 0%; background-color: rgb(149, 185, 199);">
-                                  <div class="e-event-resize e-top-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                  <div class="e-appointment-details">
-                                    <div class="e-subject" style="max-height: 104px;">Sky Gazers</div>
-                                    <div class="e-time">11:00 AM - 1:00 PM</div>
-                                    <div class="e-location"></div>
-                                  </div>
-                                  <div class="e-event-resize e-bottom-handler">
-                                    <div class="e-top-bottom-resize"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="e-day-wrapper" data-date="1519419600000">
-                              <div class="e-appointment-wrapper" id="e-appointment-wrapper-6"></div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="e-timeline-wrapper" data-date="1518901200000"></td>
-                            <td class="e-timeline-wrapper" data-date="1518987600000"></td>
-                            <td class="e-timeline-wrapper" data-date="1519074000000"></td>
-                            <td class="e-timeline-wrapper" data-date="1519160400000"></td>
-                            <td class="e-timeline-wrapper" data-date="1519246800000"></td>
-                            <td class="e-timeline-wrapper" data-date="1519333200000"></td>
-                            <td class="e-timeline-wrapper" data-date="1519419600000"></td>
-                          </tr>-->
-                        
-                        
-                        
-                         
-                    
-                  
-                
+                </tr>        
               </tbody>
             </table>
           </div>
@@ -284,3 +175,4 @@
 
 
     <app-new-pop [(newPop)]="newPop" (refreshTrigger)="refreshEvents($event)"></app-new-pop>
+</div>  

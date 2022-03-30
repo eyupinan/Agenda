@@ -28,7 +28,6 @@ export class NewComponent implements OnInit {
   ngOnInit(): void {
   }
   setDate(date:Date){
-    console.log("geldi set date")
     this.eventDto=new EventDTO()
     this.date=new Date(date);
     this.startDate= new Date(date)
@@ -38,14 +37,11 @@ export class NewComponent implements OnInit {
     this.isUpdate=false;
   }
   setEvent(event:EventDTO){
-    console.log("geldi set Event")
     this.eventDto=event;
     if (event.startDate!=null){
       this.date=new Date(<string>event.startDate);
       this.startDate=new Date(<string>event.startDate);
       this.startDateTime=this.startDate.getHours()+":"+this.startDate.getMinutes();
-      console.log("startTime:",this.startDateTime)
-      console.log(this.startDate)
     }
     if (event.endDate!=null){
       this.endDate= new Date(<string>event.endDate);

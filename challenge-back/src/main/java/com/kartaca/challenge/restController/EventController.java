@@ -46,8 +46,6 @@ public class EventController {
         if(auth==null){
             throw new ForbiddenException();
         }
-        System.out.println(eventDto.getHeader());
-        System.out.println(eventDto.getStartDate());
         UserPrincipal principal = (UserPrincipal)auth.getPrincipal();
         calendarService.createEvent(eventDto,principal.getUsername());
     }
@@ -57,8 +55,6 @@ public class EventController {
         if(auth==null){
             throw new ForbiddenException();
         }
-        System.out.println(eventDto.getHeader());
-        System.out.println(eventDto.getStartDate());
         UserPrincipal principal = (UserPrincipal)auth.getPrincipal();
         calendarService.updateEvent(eventDto,id);
     }

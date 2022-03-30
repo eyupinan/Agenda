@@ -1,11 +1,7 @@
 package com.kartaca.challenge.config;
 
 import com.kartaca.challenge.Service.AccountService;
-import com.kartaca.challenge.config.handler.SuccessHandler;
 import com.kartaca.challenge.dto.UserPrincipal;
-import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 @Configuration
@@ -44,26 +39,8 @@ public class Security extends WebSecurityConfigurerAdapter {
         http    .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/sa").permitAll()
-                .antMatchers("/user").permitAll()
-                .antMatchers("/persistMessage").permitAll()
-                .antMatchers("/destroy").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("USER")
-                .antMatchers("/api/ticket*","/api/ticket/**").hasAnyRole("USER")
                 .antMatchers("/api/event").permitAll()
-                .antMatchers("/api/user/username/**","/api/user/update/**").hasAnyRole("USER")
-                .antMatchers("/profile").hasAnyRole("USER","ADMIN")
-                .antMatchers("/api/route*").permitAll()
-                .antMatchers("/api/destination").permitAll()
-                .antMatchers("/login*").permitAll()
-                .antMatchers("/api/user/create").permitAll()
-                .antMatchers("/register*").permitAll()
-                .antMatchers("/route*").permitAll()
-                .antMatchers("/css/**").permitAll()
-                .antMatchers("/js/**").permitAll()
-                .antMatchers("/template/**").permitAll()
+                .antMatchers("/api/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -85,7 +62,7 @@ public class Security extends WebSecurityConfigurerAdapter {
                 //.failureUrl("/login?err=true")
                 .and()
                 .logout()
-                .logoutUrl("/api/perform_logout")
+                .logoutUrl("/api/logout")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
@@ -108,9 +85,5 @@ public class Security extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider());
-    }
-    @Bean
-    public AuthenticationSuccessHandler successHandler(){
-        return new SuccessHandler();
     }
 }

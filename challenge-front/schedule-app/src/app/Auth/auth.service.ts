@@ -22,16 +22,18 @@ export class AuthService {
       this.authenticated = false;
       localStorage.setItem("auth", JSON.stringify(this.authenticated));
     }
+  }
+  expired(){
+    this.authenticated=false;
+    localStorage.setItem("auth", JSON.stringify(this.authenticated));
+    this.router.navigate(['/login']);
     
-    
-
   }
   logout(){
-    this.http.get("/api/perform_logout").subscribe(()=>{
-      console.log("log out geldi")
+    this.http.get("/api/logout").subscribe(()=>{
       this.authenticated=false;
       localStorage.setItem("auth", JSON.stringify(this.authenticated));
-      this.router.navigate(['/']);
+      this.router.navigate(['/login']);
       
     });
   }
@@ -42,10 +44,6 @@ export class AuthService {
       for (const key in formValue) {
           params.append(key, formValue[key]);
       }
-         
-        /*const headers = new HttpHeaders(credentials ? {
-            authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
-        } : {});{headers: headers}*/
         this.http.post('/api/login', params.toString(),{
           observe : 'response',
           headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -62,10 +60,35 @@ export class AuthService {
           this.authenticated=false;
           localStorage.setItem("auth", JSON.stringify(this.authenticated));
           console.log("failed")
-          this.router.navigate(['/login'])
-          //throw error;   //You can also throw the error to a global error handler
+          this.router.navigate(['/login'],{ queryParams: { err: true } })
         }});
 
+    }
+    register(data:FormGroup){
+      const params = new URLSearchParams();
+      const formValue = data.value; // this.form should be a FormGroup
+      
+      for (const key in formValue) {
+          params.append(key, formValue[key]);
+      }
+      this.http.post('/api/register',params.toString(),{
+          observe : 'response',
+          headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('Access-Control-Allow-Origin','*')
+          .set('Access-Control-Allow-Methods','*')
+          .set('Access-Control-Allow-Headers','Origin, Content-Type, X-Auth-Token')
+      }).subscribe({next : response => {
+        this.authenticated=true;
+        localStorage.setItem("auth", JSON.stringify(this.authenticated));
+        console.log("registered")
+        this.router.navigate(['/login'])
+      
+    },error: (error) => {                              //Error callback
+      this.authenticated=false;
+      localStorage.setItem("auth", JSON.stringify(this.authenticated));
+      console.log("failed")
+      this.router.navigate(['/register'],{ queryParams: { err: true } })
+    }});
     }
 
 }
